@@ -59,6 +59,7 @@ namespace DatosLayer
             this.label12 = new System.Windows.Forms.Label();
             this.btnsave = new System.Windows.Forms.Button();
             this.btnUpdate = new System.Windows.Forms.Button();
+            this.btndelete = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -310,11 +311,22 @@ namespace DatosLayer
             this.btnUpdate.UseVisualStyleBackColor = true;
             this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
             // 
+            // btndelete
+            // 
+            this.btndelete.Location = new System.Drawing.Point(1024, 381);
+            this.btndelete.Name = "btndelete";
+            this.btndelete.Size = new System.Drawing.Size(75, 26);
+            this.btndelete.TabIndex = 30;
+            this.btndelete.Text = "Delete";
+            this.btndelete.UseVisualStyleBackColor = true;
+            this.btndelete.Click += new System.EventHandler(this.btndelete_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1129, 459);
+            this.Controls.Add(this.btndelete);
             this.Controls.Add(this.btnUpdate);
             this.Controls.Add(this.btnsave);
             this.Controls.Add(this.txtfax);
@@ -386,6 +398,7 @@ namespace DatosLayer
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Button btnsave;
         private System.Windows.Forms.Button btnUpdate;
+        private System.Windows.Forms.Button btndelete;
     }
 }
 

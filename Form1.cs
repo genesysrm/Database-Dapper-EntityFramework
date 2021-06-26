@@ -97,5 +97,11 @@ namespace DatosLayer
             var updates = cr.Update(newClient);
             MessageBox.Show($"{updates} updates");
         }
+
+        private void btndelete_Click(object sender, EventArgs e)
+        {
+            var delete = cr.Delete(txtid.Text);
+            MessageBox.Show($"{delete} delete");
+        }
     }
 }
