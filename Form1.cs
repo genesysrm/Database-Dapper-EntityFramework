@@ -8,12 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
-using CapaConectada.Models;
 
-namespace CapaConectada
+
+namespace DatosLayer
 {
     public partial class Form1 : Form
     {
+        CustomerRepository cr = new CustomerRepository();
         public Form1()
         {
             InitializeComponent();
@@ -21,40 +22,80 @@ namespace CapaConectada
 
         private void btncargar_Click(object sender, EventArgs e)
         {
-
-
-            SqlConnection conexion = new SqlConnection(@"Data Source=LAPTOP-Q6ODQIT5\SQLEXPRESS;Initial Catalog=Northwind;Integrated Security=True");
-            conexion.Open();
-
-            string sql = "SELECT * FROM [dbo].[Customers]";
-
-            SqlCommand comando = new SqlCommand(sql, conexion);
-            SqlDataReader datareader = comando.ExecuteReader();
-
-            List<Customer> customer = new List<Customer>();
-
-            while (datareader.Read())
-            {
-                Customer customers = new Customer();
-                customers.CompanyName = datareader.GetString(0);
-                customers.ContactName = datareader.GetString(1);
-                customers.ContactTitle = datareader.GetString(2);
-                customers.Address = datareader.GetString(3);
-                customers.City = datareader.GetString(4);
-                customers.Region = datareader["Region"] == DBNull.Value ? "" : (string)datareader["Region"];
-                customers.PostalCode = datareader.GetInt32(6);
-                customers.Country = datareader.GetString(7);
-                customers.Phone = datareader.GetString(8);
-                customers.Fax = datareader.GetString(9);
-
-                customer.Add(customers);
-            }
-
-            MessageBox.Show("Open connection");
-            conexion.Close();
-
+           
+            dataGrid.DataSource = cr.GetAll();
+      
         }
-            
-        
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            var filtro = cr.GetAll().FindAll(x => x.CompanyName.StartsWith(textBox1.Text));
+            dataGrid.DataSource = filtro;
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            //DatosLayer.Database.ApplicationName = "DEMO C# SQL";
+            //DatosLayer.Database.ConnectionTimeout = 30;
+            //string stringconnection = DatosLayer.Database.ConnectionString;
+            //var connection = DatosLayer.Database.getSqlConnection();
+        }
+
+        private void btnBuscar_Click(object sender, EventArgs e)
+        {
+            var cliente = cr.GetId(txtbuscar.Text);
+
+            txtid.Text = cliente.CustomerID;
+            txtcompany.Text = cliente.CompanyName;
+            txtcontactname.Text = cliente.ContactName;
+            txtcontacttitle.Text = cliente.ContactTitle;
+            txtaddress.Text = cliente.Address;
+            txtcity.Text = cliente.City;
+            txtregion.Text = cliente.Region;
+            txtcode.Text = cliente.PostalCode;
+            txtcountry.Text = cliente.Country;
+            txtphone.Text = cliente.Phone;
+            txtfax.Text = cliente.Fax;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var newClient = GetNewClient();
+
+            if (newClient.CustomerID == "")
+            {
+                MessageBox.Show("Customer ID empty");
+                return;
+            }
+            else
+            {
+               var insert = cr.Save(newClient);
+                MessageBox.Show($"{insert} registers save");
+            }
+        }
+
+        private Customer GetNewClient()
+        {
+            var newClient = new Customer();
+            newClient.CustomerID = txtid.Text;
+            newClient.CompanyName = txtcompany.Text;
+            newClient.ContactName = txtcontactname.Text;
+            newClient.ContactTitle = txtcontacttitle.Text;
+            newClient.Address = txtaddress.Text;
+            newClient.City = txtcity.Text;
+            newClient.Region = txtregion.Text;
+            newClient.PostalCode = txtcode.Text;
+            newClient.Country = txtcountry.Text;
+            newClient.Phone = txtphone.Text;
+            newClient.Fax = txtfax.Text;
+
+            return newClient;
+        }
+        private void btnUpdate_Click(object sender, EventArgs e)
+        {
+            var newClient = GetNewClient();
+            var updates = cr.Update(newClient);
+            MessageBox.Show($"{updates} updates");
+        }
     }
 }
